@@ -10,8 +10,8 @@ database = os.getenv("DB_NAME")
 user = os.getenv("DB_USER")
 password = os.getenv("DB_PASSWD")
 
-html = """ 
-<br>Insira a mensagem no campo abaixo: 
+html = """
+<br>Insira a mensagem no campo abaixo:
 <br>
 <form method='POST' action='/'>
     <input type='text' name='message'>
@@ -19,7 +19,7 @@ html = """
 </form>
 """
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET','POST'])
 def index():
     if request.method == 'POST':
         message = request.form.get("message")
@@ -31,9 +31,10 @@ def save(message):
     conn = psycopg2.connect(
             host=host,
             database=database,
-            user=user
+            user=user,
+            password=password
         )
-    cur = conn.cursor()  
+    cur = conn.cursor()
     sql = "INSERT INTO messages(message) VALUES(%s);"
     cur.execute(sql, (message,))
     conn.commit()
