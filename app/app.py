@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, jsonify
 from time import sleep
 import psycopg2
 import os
@@ -10,22 +10,13 @@ database = os.getenv("DB_NAME")
 user = os.getenv("DB_USER")
 password = os.getenv("DB_PASSWD")
 
-html = """
-<br>Insira a mensagem no campo abaixo:
-<br>
-<form method='POST' action='/'>
-    <input type='text' name='message'>
-    <input type='submit'>
-</form>
-"""
-
 @app.route('/', methods=['GET','POST'])
 def index():
     if request.method == 'POST':
         message = request.form.get("message")
         app.logger.info(message)
         save(message)
-    return html
+    return render_template('index.html', data=read())
 
 def save(message):
     conn = psycopg2.connect(
@@ -41,5 +32,20 @@ def save(message):
     cur.close()
     conn.close()
 
+def read():
+    conn = psycopg2.connect(
+           host=host,
+           database=database,
+           user=user,
+           password=password
+       )
+    db = conn.cursor()
+    db.execute("SELECT * FROM messages")
+    data = db.fetchall()
+    db.close()
+    conn.close()
+    return data
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8000)
+
