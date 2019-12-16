@@ -1,4 +1,4 @@
-#Versão de software:
+# Versão de software:
 
 Docker version 18.09.9-ce
 
@@ -13,7 +13,10 @@ packer 1.4.5
 Instalar docker + docker-compose + python-pip
 
 Clonar o repositório e executar dentro do diretório raiz:
+
+```bash
 docker-compose up -d
+``` 
 
 Acessar no navegador e checar a aplicação
 
@@ -22,21 +25,27 @@ Acessar no navegador e checar a aplicação
 Criar usuário com devidas permissões via IAM.
 
 Criar variáveis ambiente no SO, com os dados de acesso:
+```bash
 export AWS_ACCESS_KEY_ID=”<Access key ID>”
 export AWS_SECRET_ACCESS_KEY=”<Secret access key>”
+```
 
 Instalar packer e terraform nas versões aqui listadas.
 
 Executar:
 
+```bash
 packer validate quero.json
 packer build quero.json
+```
 
 Após término da execução, capturar AMI_ID gerada, e atualizar o arquivo buildQuero.tf .
 
 Executar:
 
+```bash
 terraform init
 terraform apply
+```
 
 Acessar instância criada via navegador, e utilizar a aplicação.
