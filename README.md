@@ -39,7 +39,7 @@ packer validate quero.json
 packer build quero.json
 ```
 
-Após término da execução, capturar AMI_ID gerada, e atualizar o arquivo buildQuero.tf .
+Após término da execução, capturar `AMI_ID` gerada, e atualizar o arquivo buildQuero.tf .
 
 Executar:
 
