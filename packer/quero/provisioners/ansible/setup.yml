@@ -1,0 +1,37 @@
+---
+- name: Setup Servidor
+  hosts: queroteste
+  become: yes
+  gather_facts: false
+
+  tasks: 
+    - name: Atualizar Server
+      yum: name="*" state=latest
+
+    - name: Instalar Docker
+      yum: name="docker" state=present
+
+    - name: Autostart Docker
+      service:
+         name: docker
+         enabled: yes
+         state: restarted
+
+    - name: Instalar biblioteca docker para python
+      pip: name=docker state=present
+
+    - name: Instalar pacote docker-composer
+      pip: name=docker-compose==1.11.0 state=present
+    
+    - name: Copiar docker-compose.yml
+      copy: src=./docker-compose.yml dest=/root/
+
+    - name: Copiar dump
+      copy: src=../../source/create_database.sql dest=/root/
+
+    - name: Copiar APP
+      synchronize: src=../../source/app/ dest=/root/app/
+
+    - name: run the service defined in docker-compose.yml
+      docker_compose:
+         project_src: /root/

@@ -1,0 +1,50 @@
+{
+    "variables": {
+        "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+ 	"aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+ 	"aws_region": "us-east-1"
+ },
+ "builders": [{
+	 "type": "amazon-ebs",
+	 "access_key": "{{user `aws_access_key`}}",
+	 "ami_name": "packer-tembici-django-{{timestamp}}",
+	 "instance_type": "t2.micro",
+	 "region": "{{user `aws_region` }}",
+	 "secret_key": "{{user `aws_secret_key`}}",
+	 "ami_description" : "Amazon Linux Image with Docker-CE",
+	 "source_ami_flter": {
+	   "filters": {
+	     "virtualization-type": "hvm",
+	     "name": "Amazon Linux*",
+	     "root-device-type": "ebs"
+	   },
+	  "most_recent": true
+	 },
+ 	 "ssh_username": "ec2-user",
+	 "associate_public_ip_address": true,
+	 "run_tags": {
+		 "Name": "quero-ami"
+	 }
+ }],
+ 
+"provisioners": [
+ {
+	 "type": "shell",
+	 "inline": "while [ ! -f /var/lib/cloud/instance/boot-fnished ]; do echo 'Waiting for cloud-init...'; sleep 1; done"
+ },
+ {
+	 "type": "shell",
+	 "script": "./provisioners/scripts/bootstrap.sh"
+ },
+ {
+	 "type": "ansible",
+	 "playbook_fle": "./provisioners/ansible/setup.yml",
+	 "user": "me"
+ },
+ {
+	 "type": "ansible",
+	 "playbook_fle": "./provisioners/ansible/deploy.yml",
+	 "user": "me"
+ }
+ ]
+}

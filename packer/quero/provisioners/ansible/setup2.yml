@@ -1,0 +1,28 @@
+---
+- name: Setup Servidor
+  hosts: queroteste
+  become: yes
+  gather_facts: false
+
+  tasks: 
+#    - name: Atualizar Server
+#      yum: name="*" state=latest
+
+#    - name: Instalar Docker
+#      yum: name="docker" state=present
+
+#    - name: Instalar python3
+#      yum: name="python3" state="latest"
+
+    - name: Autostart Docker
+      service:
+         name: docker
+         enabled: yes
+         state: restarted
+
+#    - name: Instalar pip
+#      yum: name=python3-pip state=present
+
+    - name: run the service defined in my_project's docker-compose.yml
+      docker_compose:
+         project_src: /home/ec2-user/querochallenge/packer/quero/provisioners/ansible/docker-compose.yml
