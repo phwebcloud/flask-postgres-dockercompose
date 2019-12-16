@@ -1,6 +1,6 @@
 ---
 - name: Setup Servidor
-  hosts: queroteste
+  hosts: all
   become: yes
   gather_facts: false
 
@@ -17,6 +17,9 @@
          enabled: yes
          state: restarted
 
+    - name: Instalar python-pip
+      yum: name="python-pip" state=present
+
     - name: Instalar biblioteca docker para python
       pip: name=docker state=present
 
@@ -32,6 +35,6 @@
     - name: Copiar APP
       synchronize: src=../../source/app/ dest=/root/app/
 
-    - name: run the service defined in docker-compose.yml
+    - name: Executar services no docker-compose.yml
       docker_compose:
          project_src: /root/
