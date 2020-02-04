@@ -35,8 +35,8 @@ Instalar packer e terraform nas versões aqui listadas.
 Executar:
 
 ```bash
-packer validate quero.json
-packer build quero.json
+packer validate packer.json
+packer build packer.json
 ```
 
 Após término da execução, capturar `AMI_ID` gerada, e atualizar o arquivo buildQuero.tf .
