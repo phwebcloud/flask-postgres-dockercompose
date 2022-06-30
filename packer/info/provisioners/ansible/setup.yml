@@ -38,21 +38,13 @@
     - name: Copiar APP
       synchronize: src=../../source/app/ dest=/root/app/
 
-    - name: pwd
-      shell: pwd
-      register: pwd
-
-    - name: debug pwd
-      debug:
-        msg: "{{ pwd.stdout_lines }}"
-
     - name: Criar link simbolico docker-compose
       file:
         src: /usr/local/bin/docker-compose
         dest: /usr/bin/docker-compose
         state: link
 
-    - name: docker-compose
+    - name: Checando binario docker-compose
       shell: which docker-compose
       register: docker_compose
 
