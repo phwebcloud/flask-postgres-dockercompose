@@ -1,0 +1,64 @@
+---
+- name: Setup Servidor
+  hosts: all
+  become: yes
+  gather_facts: false
+
+  tasks: 
+    - name: Atualizar Server
+      yum: 
+        name="*" 
+        state=latest
+        lock_timeout=180
+
+    - name: Instalar Docker
+      yum: name="docker" state=present
+
+    - name: Autostart Docker
+      service:
+         name: docker
+         enabled: yes
+         state: restarted
+
+    - name: Instalar python-pip
+      yum: name="python3-pip" state=present
+
+    - name: Instalar biblioteca docker para python
+      pip: name=docker state=present executable=pip3
+
+    - name: Instalar pacote docker-composer
+      pip: name=docker-compose state=present executable=pip3
+    
+    - name: Copiar docker-compose.yml
+      copy: src=./docker-compose.yml dest=/root/
+
+    - name: Copiar dump
+      copy: src=../../source/create_database.sql dest=/root/
+
+    - name: Copiar APP
+      synchronize: src=../../source/app/ dest=/root/app/
+
+    - name: pwd
+      shell: pwd
+      register: pwd
+
+    - name: debug pwd
+      debug:
+        msg: "{{ pwd.stdout_lines }}"
+
+    - name: Criar link simbolico docker-compose
+      file:
+        src: /usr/local/bin/docker-compose
+        dest: /usr/bin/docker-compose
+        state: link
+
+    - name: docker-compose
+      shell: which docker-compose
+      register: docker_compose
+
+    - name: debug-docker-compose
+      debug:
+        msg: "{{ docker_compose.stdout_lines }}"
+
+    - name: Executar services no docker-compose.yml
+      shell: docker-compose -f /root/docker-compose.yml up --build -d

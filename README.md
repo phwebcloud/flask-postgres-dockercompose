@@ -1,12 +1,12 @@
 # Versão de software:
 
-Docker version 18.09.9-ce
+Docker version 20.10.16
 
-ansible 2.8.5
+ansible 2.9.27
 
-Terraform v0.11.14
+Terraform v1.2.3
 
-packer 1.4.5
+packer 1.8.2
 
 # Teste
 
@@ -39,7 +39,7 @@ packer validate packer.json
 packer build packer.json
 ```
 
-Após término da execução, capturar `AMI_ID` gerada, e atualizar o arquivo buildQuero.tf .
+Após término da execução, capturar `AMI_ID` gerada, e atualizar o arquivo main.tf .
 
 Executar:
 

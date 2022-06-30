@@ -12,8 +12,8 @@ services:
          - 80:8000
       environment:
          - DB_HOST=postgres-db
-         - DB_USER=quero
-         - DB_PASSWD=queropass
+         - DB_USER=myuser
+         - DB_PASSWD=mypass
       depends_on:
          - postgres-db
 
@@ -22,12 +22,13 @@ services:
       restart: always
       image: postgres:10
       volumes:
-#         - postgres_data:/var/lib/postgresql/data
+         - postgres_data:/var/lib/postgresql/data
          - ./create_database.sql:/docker-entrypoint-initdb.d/database.sql
       ports:
          - "5432:5432"
       environment:
-         - POSTGRES_USER=quero
-         - POSTGRES_PASSWD=queropass
+         - POSTGRES_USER=myuser
+         - POSTGRES_PASSWORD=mypass
+
 volumes:
    postgres_data:

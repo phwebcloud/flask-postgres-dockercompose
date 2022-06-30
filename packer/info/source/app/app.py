@@ -10,6 +10,7 @@ database = os.getenv("DB_NAME")
 user = os.getenv("DB_USER")
 password = os.getenv("DB_PASSWD")
 
+
 @app.route('/', methods=['GET','POST'])
 def index():
     if request.method == 'POST':
@@ -17,6 +18,25 @@ def index():
         app.logger.info(message)
         save(message)
     return render_template('index.html', data=read())
+
+
+@app.route('/limpar', methods=['GET'])
+def limpa():
+    if request.method == 'GET':
+        conn = psycopg2.connect(
+            host=host,
+            database=database,
+            user=user,
+            password=password
+        )
+
+        db = conn.cursor()
+        db.execute("DELETE from messages")
+        conn.commit()
+        db.close()
+        conn.close()
+    return render_template('index.html')
+       
 
 def save(message):
     conn = psycopg2.connect(
@@ -31,6 +51,7 @@ def save(message):
     conn.commit()
     cur.close()
     conn.close()
+
 
 def read():
     conn = psycopg2.connect(

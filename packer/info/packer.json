@@ -10,7 +10,7 @@
         "region": "{{user `aws_region`}}",
         "instance_type": "t2.micro",
         "ssh_username": "ec2-user",
-        "ami_name": "packer-quero-ami-{{timestamp}}",
+        "ami_name": "packer-app-ami-{{timestamp}}",
         "ami_description": "Customized Amazon Linux",
         "associate_public_ip_address": "true",
         "source_ami": "ami-00068cd7555f543d5"
